@@ -1,25 +1,14 @@
 import '../css/common.css';
 import countryCardTpl from '../templates/country-card.hbs';
-// import API from './api-service';
-// import getRefs from './get-refs';
+import countryListTpl from '../templates/country-search.hbs';
+import API from './api-service';
+import getRefs from './get-refs';
 
-const refs = {
-  cardContainer: document.querySelector('.js-card-container'),
-  searhForm: document.querySelector('.js-search-form'),
-};
+const refs = getRefs();
 
 console.log(refs.searhForm);
 
 refs.searhForm.addEventListener('submit', onSearch);
-
-function fetchCountry(CountryName) {
-  return fetch(`https://restcountries.eu/rest/v2/name/${CountryName}`).then(
-    response => {
-      console.log(response);
-      return response.json();
-    },
-  );
-}
 
 function onSearch(e) {
   e.preventDefault();
@@ -28,23 +17,16 @@ function onSearch(e) {
   const SearchQuery = form.elements.query.value;
   console.log(SearchQuery);
 
-  fetchCountry(SearchQuery)
+  API.fetchCountry(SearchQuery)
     .then(rendercountryCard)
-    .catch(error => console.log(error))
+    .catch(error => {
+      console.log(error);
+      alert('Где-то ошибка');
+    })
     .finally(() => {
       form.reset();
     });
 }
-
-// const refs = getRefs();
-
-// refs.searchForm.addEventListener('submit', onSearch);
-
-// function onSearch(e) {
-//   e.preventDefault();
-
-//   const form = e.currentTarget;
-//   const searchQuery = form.elements.query.value;
 
 //   API.fetchPokemon(searchQuery)
 //     .then(renderPokemonCard)

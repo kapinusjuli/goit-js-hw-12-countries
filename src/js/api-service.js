@@ -1,9 +1,9 @@
-const BASE_URL = 'https://pokeapi.co/api/v2';
-
-function fetchPokemon(pokemonId) {
-  return fetch(`${BASE_URL}/pokemon/${pokemonId}`).then(response =>
-    response.json(),
-  );
+function fetchCountry(CountryName) {
+  const BASE_URL = `https://restcountries.eu/rest/v2/name/${CountryName}`;
+  return fetch(BASE_URL).then(response => {
+    console.log(response);
+    return response.json();
+  });
 }
 
-export default { fetchPokemon };
+export default { fetchCountry };
