@@ -15,9 +15,10 @@ refs.formControl.addEventListener('input', debounce(onSearch, 500));
 function onSearch(e) {
   e.preventDefault();
 
-  refs.cardContainer.innerHTML = '';
+  // refs.cardContainer.innerHTML = '';
 
   // const form = e.currentTarget;
+  clearCountriesContainer();
   const SearchQuery = e.target.value;
   console.log(SearchQuery);
 
@@ -55,5 +56,5 @@ function searchResult(countries) {
 }
 
 function clearCountriesContainer() {
-  refs.countryContainer.innerHTML = '';
+  refs.cardContainer.innerHTML = '';
 }
