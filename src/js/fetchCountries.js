@@ -2,56 +2,59 @@ import '../css/common.css';
 import countryCardTpl from '../templates/country-card.hbs';
 import countryListTpl from '../templates/country-search.hbs';
 import API from './api-service';
+import debounce from 'lodash.debounce';
 import getRefs from './get-refs';
+import error from './pnotify';
 
 const refs = getRefs();
 
 console.log(refs.searhForm);
 
 refs.searhForm.addEventListener('submit', onSearch);
+refs.formControl.addEventListener('input', debounce(onSearch, 500));
 
 function onSearch(e) {
   e.preventDefault();
+
+  refs.cardContainer.innerHTML = '';
 
   const form = e.currentTarget;
   const SearchQuery = form.elements.query.value;
   console.log(SearchQuery);
 
   API.fetchCountry(SearchQuery)
-    .then(rendercountryCard)
-    .catch(error => {
-      console.log(error);
-      alert('Где-то ошибка');
-    })
+    .then(searchResult)
+    // .then(isFetchSucces)
+    .catch(console.log)
     .finally(() => {
       form.reset();
     });
 }
+// console.log(API.fetchCountry);
 
-//   API.fetchPokemon(searchQuery)
-//     .then(renderPokemonCard)
-//     .catch(onFetchError)
-//     .finally(() => form.reset());
-// }
-
-function rendercountryCard(countrie) {
+function rendercountryCard(countrie, countryCardTpl) {
   const markup = countryCardTpl(countrie);
   refs.cardContainer.innerHTML = markup;
 }
 
-// function onFetchError(error) {
-//   alert('Упс, что-то пошло не так и мы не нашли вашего покемона!');
-// }
+function searchResult(countries) {
+  const countCountries = countries.length;
+  console.log(countCountries);
 
-// // =========================================
+  if (countCountries === 1) {
+    rendercountryCard(countries, countryCardTpl);
+  } else if (countCountries >= 2 && countCountries <= 10) {
+    rendercountryCard(countries, countryListTpl);
+  } else if (countCountries > 10) {
+    clearCountriesContainer();
+    pnotify.Info();
+  } else {
+    clearCountriesContainer();
+    // console.log(console.error());
+    error.Error();
+  }
+}
 
-// const url = 'https://newsapi.org/v2/everything?q=cars';
-// const options = {
-//   headers: {
-//     Authorization: '4330ebfabc654a6992c2aa792f3173a3',
-//   },
-// };
-
-// fetch(url, options)
-//   .then(r => r.json())
-//   .then(console.log);
+function clearCountriesContainer() {
+  refs.countryContainer.innerHTML = '';
+}

@@ -26,6 +26,9 @@
     "parcel-plugin-handlebars-precompile": "^1.0.2"
   },
   "dependencies": {
-    "parcel-plugin-nuke-dist": "^1.0.1"
+    "@pnotify/core": "^5.2.0",
+    "lodash.debounce": "^4.0.8",
+    "parcel-plugin-nuke-dist": "^1.0.1",
+    "pnotify": "^5.2.0"
   }
 }
