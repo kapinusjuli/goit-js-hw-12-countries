@@ -4,13 +4,12 @@ import countryListTpl from '../templates/country-search.hbs';
 import API from './api-service';
 import debounce from 'lodash.debounce';
 import getRefs from './get-refs';
-import error from './pnotify';
+import pnotify from './pnotify';
 
 const refs = getRefs();
 
 console.log(refs.searhForm);
 
-refs.searhForm.addEventListener('submit', onSearch);
 refs.formControl.addEventListener('input', debounce(onSearch, 500));
 
 function onSearch(e) {
@@ -18,17 +17,17 @@ function onSearch(e) {
 
   refs.cardContainer.innerHTML = '';
 
-  const form = e.currentTarget;
-  const SearchQuery = form.elements.query.value;
+  // const form = e.currentTarget;
+  const SearchQuery = e.target.value;
   console.log(SearchQuery);
 
   API.fetchCountry(SearchQuery)
     .then(searchResult)
     // .then(isFetchSucces)
-    .catch(console.log)
-    .finally(() => {
-      form.reset();
-    });
+    .catch(console.log);
+  // .finally(() => {
+  //   form.reset();
+  // })
 }
 // console.log(API.fetchCountry);
 
@@ -51,7 +50,7 @@ function searchResult(countries) {
   } else {
     clearCountriesContainer();
     // console.log(console.error());
-    error.Error();
+    pnotify.error();
   }
 }
 
