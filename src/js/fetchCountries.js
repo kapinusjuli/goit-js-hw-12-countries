@@ -19,10 +19,12 @@ function onSearch(e) {
 
   // const form = e.currentTarget;
   clearCountriesContainer();
-  const SearchQuery = e.target.value;
-  console.log(SearchQuery);
-
-  API.fetchCountry(SearchQuery)
+  const searchQuery = e.target.value;
+  console.log(searchQuery);
+  if (!searchQuery) {
+    return;
+  }
+  API.fetchCountry(searchQuery)
     .then(searchResult)
     // .then(isFetchSucces)
     .catch(console.log);
@@ -51,7 +53,7 @@ function searchResult(countries) {
   } else {
     clearCountriesContainer();
     // console.log(console.error());
-    pnotify.error();
+    pnotify.Error();
   }
 }
 
